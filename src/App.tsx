@@ -1,0 +1,151 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Layout from './components/layout/Layout';
+import LoginPage from './pages/auth/LoginPage';
+import SignupPage from './pages/auth/SignupPage';
+import ManagerDashboard from './pages/dashboard/ManagerDashboard';
+import EngineerDashboard from './pages/dashboard/EngineerDashboard';
+import LoadingSpinner from './components/common/LoadingSpinner';
+
+// Protected Route Component
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    const { isAuthenticated, loading, user } = useAuth();
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <LoadingSpinner size="lg" />
+            </div>
+        );
+    }
+
+    if (!isAuthenticated) {
+        return <Navigate to="/login" replace />;
+    }
+
+    return <>{children}</>;
+};
+
+// Role-based Route Component
+const RoleRoute: React.FC<{
+    children: React.ReactNode;
+    allowedRoles: string[];
+}> = ({ children, allowedRoles }) => {
+    const { user } = useAuth();
+
+    if (!user || !allowedRoles.includes(user.role)) {
+        return <Navigate to="/dashboard" replace />;
+    }
+
+    return <>{children}</>;
+};
+
+// Dashboard Component that routes based on user role
+const Dashboard: React.FC = () => {
+    const { user } = useAuth();
+
+    if (user?.role === 'manager') {
+        return <ManagerDashboard />;
+    }
+
+    return <EngineerDashboard />;
+};
+
+// Placeholder components for other pages
+const ProjectsPage: React.FC = () => (
+    <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Projects</h2>
+        <p className="text-gray-600">Projects management page coming soon...</p>
+    </div>
+);
+
+const AssignmentsPage: React.FC = () => (
+    <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Assignments</h2>
+        <p className="text-gray-600">Assignments management page coming soon...</p>
+    </div>
+);
+
+const TeamPage: React.FC = () => (
+    <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Team Overview</h2>
+        <p className="text-gray-600">Team overview page coming soon...</p>
+    </div>
+);
+
+const AnalyticsPage: React.FC = () => (
+    <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Analytics</h2>
+        <p className="text-gray-600">Analytics dashboard coming soon...</p>
+    </div>
+);
+
+const ProfilePage: React.FC = () => (
+    <div className="text-center py-12">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4">Profile</h2>
+        <p className="text-gray-600">Profile management page coming soon...</p>
+    </div>
+);
+
+const App: React.FC = () => {
+    return (
+        <AuthProvider>
+            <Router>
+                <Routes>
+                    {/* Public routes */}
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignupPage />} />
+
+                    {/* Protected routes */}
+                    <Route
+                        path="/"
+                        element={
+                            <ProtectedRoute>
+                                <Layout />
+                            </ProtectedRoute>
+                        }
+                    >
+                        <Route index element={<Navigate to="/dashboard" replace />} />
+                        <Route path="dashboard" element={<Dashboard />} />
+
+                        {/* Manager-only routes */}
+                        <Route
+                            path="team"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <TeamPage />
+                                </RoleRoute>
+                            }
+                        />
+                        <Route
+                            path="projects"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <ProjectsPage />
+                                </RoleRoute>
+                            }
+                        />
+                        <Route
+                            path="analytics"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <AnalyticsPage />
+                                </RoleRoute>
+                            }
+                        />
+
+                        {/* Shared routes */}
+                        <Route path="assignments" element={<AssignmentsPage />} />
+                        <Route path="profile" element={<ProfilePage />} />
+                    </Route>
+
+                    {/* Catch all route */}
+                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                </Routes>
+            </Router>
+        </AuthProvider>
+    );
+};
+
+export default App; 
