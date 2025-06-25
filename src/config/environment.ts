@@ -13,7 +13,11 @@ const getApiBaseUrl = () => {
 };
 
 export const config = {
-    apiBaseUrl: getApiBaseUrl(),
+    apiBaseUrl:
+        import.meta.env.VITE_API_BASE_URL ||
+        (window?.location?.hostname === 'localhost'
+            ? 'http://localhost:3000'
+            : 'https://erm-be.onrender.com'),
     environment: import.meta.env.MODE,
     isDevelopment: import.meta.env.DEV,
     isProduction: import.meta.env.PROD,
