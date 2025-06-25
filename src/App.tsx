@@ -6,6 +6,8 @@ import LoginPage from './pages/auth/LoginPage';
 import SignupPage from './pages/auth/SignupPage';
 import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import EngineerDashboard from './pages/dashboard/EngineerDashboard';
+import CreateProjectPage from './pages/projects/CreateProjectPage';
+import CreateAssignmentPage from './pages/assignments/CreateAssignmentPage';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 // Protected Route Component
@@ -127,6 +129,14 @@ const App: React.FC = () => {
                             }
                         />
                         <Route
+                            path="projects/new"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <CreateProjectPage />
+                                </RoleRoute>
+                            }
+                        />
+                        <Route
                             path="analytics"
                             element={
                                 <RoleRoute allowedRoles={['manager']}>
@@ -137,6 +147,14 @@ const App: React.FC = () => {
 
                         {/* Shared routes */}
                         <Route path="assignments" element={<AssignmentsPage />} />
+                        <Route
+                            path="assignments/new"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <CreateAssignmentPage />
+                                </RoleRoute>
+                            }
+                        />
                         <Route path="profile" element={<ProfilePage />} />
                     </Route>
 
