@@ -229,4 +229,49 @@ For support and questions:
 
 ---
 
+## 📝 Project Approach & Tools Used
+
+### Approach
+
+- **Frontend:**  
+  - Built with React and TypeScript for a modern, maintainable UI.
+  - Focused on rapid prototyping and iterative UI/UX improvements.
+  - Debugging and UI enhancements were prioritized due to time constraints.
+
+- **Backend:**  
+  - Node.js/Express REST API for robust data handling.
+  - Emphasis on clear API structure and deployment readiness.
+
+---
+
+### Tools Used
+
+- **Frontend:**
+  - React, TypeScript, Vite
+  - Tailwind CSS for styling
+  - Lucide React for icons
+  - Vercel for deployment
+
+- **Backend:**
+  - Node.js, Express, MongoDB
+  - Mongoose for data modeling
+  - Render.com for deployment
+
+---
+
+### AI Tools Involvement
+
+- **Cursor:**  
+  Used extensively for frontend debugging and UI enhancement. Cursor's AI-powered features helped quickly identify and resolve issues, and provided code suggestions to speed up development.
+
+- **ChatGPT:**  
+  Used primarily for backend error resolution and deployment guidance. ChatGPT provided solutions for API errors, deployment configuration, and best practices for production readiness.
+
+---
+
+**Summary:**  
+This project leveraged both traditional development tools and modern AI assistants (Cursor and ChatGPT) to accelerate delivery, especially under tight deadlines. AI tools were instrumental in debugging, code generation, and deployment troubleshooting.
+
+---
+
 **Built with ❤️ for efficient engineering resource management**
