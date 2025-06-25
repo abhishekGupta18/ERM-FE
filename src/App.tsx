@@ -8,6 +8,12 @@ import ManagerDashboard from './pages/dashboard/ManagerDashboard';
 import EngineerDashboard from './pages/dashboard/EngineerDashboard';
 import CreateProjectPage from './pages/projects/CreateProjectPage';
 import CreateAssignmentPage from './pages/assignments/CreateAssignmentPage';
+import ProjectsPage from './pages/projects/ProjectsPage';
+import AssignmentsPage from './pages/assignments/AssignmentsPage';
+import TeamPage from './pages/team/TeamPage';
+import AnalyticsPage from './pages/analytics/AnalyticsPage';
+import EditProjectPage from './pages/projects/EditProjectPage';
+import EditAssignmentPage from './pages/assignments/EditAssignmentPage';
 import LoadingSpinner from './components/common/LoadingSpinner';
 
 // Protected Route Component
@@ -53,35 +59,6 @@ const Dashboard: React.FC = () => {
 
     return <EngineerDashboard />;
 };
-
-// Placeholder components for other pages
-const ProjectsPage: React.FC = () => (
-    <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Projects</h2>
-        <p className="text-gray-600">Projects management page coming soon...</p>
-    </div>
-);
-
-const AssignmentsPage: React.FC = () => (
-    <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Assignments</h2>
-        <p className="text-gray-600">Assignments management page coming soon...</p>
-    </div>
-);
-
-const TeamPage: React.FC = () => (
-    <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Team Overview</h2>
-        <p className="text-gray-600">Team overview page coming soon...</p>
-    </div>
-);
-
-const AnalyticsPage: React.FC = () => (
-    <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Analytics</h2>
-        <p className="text-gray-600">Analytics dashboard coming soon...</p>
-    </div>
-);
 
 const ProfilePage: React.FC = () => (
     <div className="text-center py-12">
@@ -137,6 +114,14 @@ const App: React.FC = () => {
                             }
                         />
                         <Route
+                            path="projects/:id/edit"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <EditProjectPage />
+                                </RoleRoute>
+                            }
+                        />
+                        <Route
                             path="analytics"
                             element={
                                 <RoleRoute allowedRoles={['manager']}>
@@ -146,12 +131,27 @@ const App: React.FC = () => {
                         />
 
                         {/* Shared routes */}
-                        <Route path="assignments" element={<AssignmentsPage />} />
+                        <Route
+                            path="assignments"
+                            element={
+                                <RoleRoute allowedRoles={['manager', 'engineer']}>
+                                    <AssignmentsPage />
+                                </RoleRoute>
+                            }
+                        />
                         <Route
                             path="assignments/new"
                             element={
                                 <RoleRoute allowedRoles={['manager']}>
                                     <CreateAssignmentPage />
+                                </RoleRoute>
+                            }
+                        />
+                        <Route
+                            path="assignments/:id/edit"
+                            element={
+                                <RoleRoute allowedRoles={['manager']}>
+                                    <EditAssignmentPage />
                                 </RoleRoute>
                             }
                         />
