@@ -4,6 +4,7 @@ import { apiService } from '../services/api';
 
 interface AuthContextType {
     user: User | null;
+    setUser: React.Dispatch<React.SetStateAction<User | null>>;
     token: string | null;
     login: (email: string, password: string) => Promise<void>;
     signup: (userData: any) => Promise<void>;
@@ -104,6 +105,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const value: AuthContextType = {
         user,
+        setUser,
         token,
         login,
         signup,

@@ -189,6 +189,15 @@ class ApiService {
         }
     }
 
+    async getAssignment(assignmentId: string): Promise<ApiResponse<Assignment>> {
+        try {
+            const response: AxiosResponse<ApiResponse<Assignment>> = await this.api.get(`/getAssignment/${assignmentId}`);
+            return response.data;
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || 'Failed to fetch assignment');
+        }
+    }
+
     // Analytics
     async getUtilizationAnalytics(): Promise<ApiResponse<any>> {
         try {

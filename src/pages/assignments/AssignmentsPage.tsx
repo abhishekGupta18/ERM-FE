@@ -4,12 +4,14 @@ import { Eye, Edit, Trash2, Plus } from 'lucide-react';
 import { apiService } from '../../services/api';
 import { Assignment } from '../../types';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { useSearch } from '../../context/SearchContext';
 
 const AssignmentsPage: React.FC = () => {
     const [assignments, setAssignments] = useState<Assignment[]>([]);
     const [loading, setLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { search } = useSearch();
 
     const fetchAssignments = async () => {
         setLoading(true);
@@ -48,6 +50,16 @@ const AssignmentsPage: React.FC = () => {
         }
     };
 
+    // Filter assignments by search
+    const filteredAssignments = assignments.filter(a => {
+        const q = search.toLowerCase();
+        return (
+            (a.engineerId?.name?.toLowerCase() || '').includes(q) ||
+            (a.projectId?.name?.toLowerCase() || '').includes(q) ||
+            (a.role?.toLowerCase() || '').includes(q)
+        );
+    });
+
     if (loading) {
         return <div className="flex items-center justify-center h-64"><LoadingSpinner size="lg" /></div>;
     }
@@ -63,7 +75,7 @@ const AssignmentsPage: React.FC = () => {
                     <Plus className="h-4 w-4 mr-2" /> New Assignment
                 </button>
             </div>
-            {assignments.length === 0 ? (
+            {filteredAssignments.length === 0 ? (
                 <div className="text-center py-12">
                     <p className="text-gray-600">No assignments found. Start by creating a new assignment.</p>
                 </div>
@@ -82,7 +94,7 @@ const AssignmentsPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {assignments.map(assignment => (
+                            {filteredAssignments.map(assignment => (
                                 <tr key={assignment._id} className="hover:bg-gray-50">
                                     <td className="px-4 py-2 border-b font-medium">{assignment.engineerId?.name || '-'}</td>
                                     <td className="px-4 py-2 border-b">{assignment.projectId?.name || '-'}</td>

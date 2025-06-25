@@ -4,12 +4,14 @@ import { Eye, Edit, Trash2, Plus } from 'lucide-react';
 import { apiService } from '../../services/api';
 import { Project } from '../../types';
 import LoadingSpinner from '../../components/common/LoadingSpinner';
+import { useSearch } from '../../context/SearchContext';
 
 const ProjectsPage: React.FC = () => {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const navigate = useNavigate();
+    const { search } = useSearch();
 
     const fetchProjects = async () => {
         setLoading(true);
@@ -48,6 +50,16 @@ const ProjectsPage: React.FC = () => {
         }
     };
 
+    // Filter projects by search
+    const filteredProjects = projects.filter(p => {
+        const q = search.toLowerCase();
+        return (
+            p.name.toLowerCase().includes(q) ||
+            p.description.toLowerCase().includes(q) ||
+            p.status.toLowerCase().includes(q)
+        );
+    });
+
     if (loading) {
         return <div className="flex items-center justify-center h-64"><LoadingSpinner size="lg" /></div>;
     }
@@ -63,7 +75,7 @@ const ProjectsPage: React.FC = () => {
                     <Plus className="h-4 w-4 mr-2" /> New Project
                 </Link>
             </div>
-            {projects.length === 0 ? (
+            {filteredProjects.length === 0 ? (
                 <div className="text-center py-12">
                     <p className="text-gray-600">No projects found. Start by creating a new project.</p>
                 </div>
@@ -81,7 +93,7 @@ const ProjectsPage: React.FC = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {projects.map(project => (
+                            {filteredProjects.map(project => (
                                 <tr key={project._id} className="hover:bg-gray-50">
                                     <td className="px-4 py-2 border-b font-medium">{project.name}</td>
                                     <td className="px-4 py-2 border-b">{project.status}</td>

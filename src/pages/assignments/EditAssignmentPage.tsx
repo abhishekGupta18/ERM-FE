@@ -9,7 +9,7 @@ const EditAssignmentPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const [formData, setFormData] = useState<Partial<Assignment>>({});
+    const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [engineers, setEngineers] = useState<User[]>([]);
     const [projects, setProjects] = useState<Project[]>([]);
 
@@ -65,7 +65,12 @@ const EditAssignmentPage: React.FC = () => {
         }
         try {
             setLoading(true);
-            const response = await apiService.updateAssignment(id!, formData);
+            const payload = {
+                ...formData,
+                engineerId: formData.engineerId,
+                projectId: formData.projectId,
+            };
+            const response = await apiService.updateAssignment(id!, payload);
             if (response.success) {
                 alert('Assignment updated successfully!');
                 navigate('/assignments');

@@ -14,7 +14,9 @@ import TeamPage from './pages/team/TeamPage';
 import AnalyticsPage from './pages/analytics/AnalyticsPage';
 import EditProjectPage from './pages/projects/EditProjectPage';
 import EditAssignmentPage from './pages/assignments/EditAssignmentPage';
+import ProfilePage from './pages/profile/ProfilePage';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import { SearchProvider } from './context/SearchContext';
 
 // Protected Route Component
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -60,108 +62,103 @@ const Dashboard: React.FC = () => {
     return <EngineerDashboard />;
 };
 
-const ProfilePage: React.FC = () => (
-    <div className="text-center py-12">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Profile</h2>
-        <p className="text-gray-600">Profile management page coming soon...</p>
-    </div>
-);
-
 const App: React.FC = () => {
     return (
         <AuthProvider>
-            <Router>
-                <Routes>
-                    {/* Public routes */}
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<SignupPage />} />
+            <SearchProvider>
+                <Router>
+                    <Routes>
+                        {/* Public routes */}
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="/signup" element={<SignupPage />} />
 
-                    {/* Protected routes */}
-                    <Route
-                        path="/"
-                        element={
-                            <ProtectedRoute>
-                                <Layout />
-                            </ProtectedRoute>
-                        }
-                    >
-                        <Route index element={<Navigate to="/dashboard" replace />} />
-                        <Route path="dashboard" element={<Dashboard />} />
+                        {/* Protected routes */}
+                        <Route
+                            path="/"
+                            element={
+                                <ProtectedRoute>
+                                    <Layout />
+                                </ProtectedRoute>
+                            }
+                        >
+                            <Route index element={<Navigate to="/dashboard" replace />} />
+                            <Route path="dashboard" element={<Dashboard />} />
 
-                        {/* Manager-only routes */}
-                        <Route
-                            path="team"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <TeamPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route
-                            path="projects"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <ProjectsPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route
-                            path="projects/new"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <CreateProjectPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route
-                            path="projects/:id/edit"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <EditProjectPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route
-                            path="analytics"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <AnalyticsPage />
-                                </RoleRoute>
-                            }
-                        />
+                            {/* Manager-only routes */}
+                            <Route
+                                path="team"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <TeamPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route
+                                path="projects"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <ProjectsPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route
+                                path="projects/new"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <CreateProjectPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route
+                                path="projects/:id/edit"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <EditProjectPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route
+                                path="analytics"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <AnalyticsPage />
+                                    </RoleRoute>
+                                }
+                            />
 
-                        {/* Shared routes */}
-                        <Route
-                            path="assignments"
-                            element={
-                                <RoleRoute allowedRoles={['manager', 'engineer']}>
-                                    <AssignmentsPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route
-                            path="assignments/new"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <CreateAssignmentPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route
-                            path="assignments/:id/edit"
-                            element={
-                                <RoleRoute allowedRoles={['manager']}>
-                                    <EditAssignmentPage />
-                                </RoleRoute>
-                            }
-                        />
-                        <Route path="profile" element={<ProfilePage />} />
-                    </Route>
+                            {/* Shared routes */}
+                            <Route
+                                path="assignments"
+                                element={
+                                    <RoleRoute allowedRoles={['manager', 'engineer']}>
+                                        <AssignmentsPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route
+                                path="assignments/new"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <CreateAssignmentPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route
+                                path="assignments/:id/edit"
+                                element={
+                                    <RoleRoute allowedRoles={['manager']}>
+                                        <EditAssignmentPage />
+                                    </RoleRoute>
+                                }
+                            />
+                            <Route path="profile" element={<ProfilePage />} />
+                        </Route>
 
-                    {/* Catch all route */}
-                    <Route path="*" element={<Navigate to="/dashboard" replace />} />
-                </Routes>
-            </Router>
+                        {/* Catch all route */}
+                        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+                    </Routes>
+                </Router>
+            </SearchProvider>
         </AuthProvider>
     );
 };
