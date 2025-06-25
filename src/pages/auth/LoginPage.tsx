@@ -100,6 +100,7 @@ const LoginPage: React.FC = () => {
                                     type={showPassword ? 'text' : 'password'}
                                     className="appearance-none block w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                     placeholder="Enter your password"
+                                    autoComplete="current-password"
                                 />
                                 <button
                                     type="button"
